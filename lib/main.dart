@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 // void main() {
 //   runApp(
@@ -15,14 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      theme: ThemeData(primarySwatch: Colors.indigo),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Dice Game"),
+          title: const Text("Dice Game"),
           centerTitle: true,
         ),
-        body: HomeScreen(),
+        body: const HomeScreen(),
       ),
     );
   }
@@ -36,22 +36,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _img1url = "images/1.png";
-  String _img2url = "images/1.png";
-  String _winner = "";
+  int leftDiceNo = 2;
+  int rightDiceNo = 2;
 
   void onClick() {
-    this.setState(() {
-      var ranNo1 = Random().nextInt(6) + 1;
-      _img1url = "images/$ranNo1.png";
-      var ranNo2 = Random().nextInt(5) + 1;
-      _img2url = "images/$ranNo2.png";
-      if (ranNo1 > ranNo2) {
-        _winner = "Palyer 1 \nwon this round";
-      } else if (ranNo1 < ranNo2) {
-        _winner = "Palyer 2 \nwon  this round";
+    setState(() {
+      leftDiceNo = Random().nextInt(6) + 1;
+      rightDiceNo = Random().nextInt(5) + 1;
+
+      if (leftDiceNo > rightDiceNo) {
+      } else if (leftDiceNo < rightDiceNo) {
+        //_winner = "Palyer 2 \nwon  this round";
       } else {
-        _winner = "No Winner this round";
+        //_winner = "No Winner this round";
       }
     });
   }
@@ -59,84 +56,84 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+      color: Colors.indigo.shade200,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                padding: EdgeInsets.all(30),
-                child: const Text(
-                  "Player 1",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.5,
+              Column(
+                children: [
+                  const Text(
+                    "Player 1",
+                    style: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(30),
-                child: const Text(
-                  "Player 1",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.5,
+                  const SizedBox(
+                    width: 100.0,
+                    height: 50.0,
+                    child: Divider(
+                      color: Colors.white,
+                      thickness: 2.0,
+                    ),
                   ),
-                ),
+                  Image(
+                    image: AssetImage("images/$leftDiceNo.png"),
+                    width: 120,
+                    height: 120,
+                  ),
+                ],
               ),
+              Column(
+                children: [
+                  const Text(
+                    "Player 2",
+                    style: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 100.0,
+                    height: 50.0,
+                    child: Divider(
+                      color: Colors.white,
+                      thickness: 2.0,
+                    ),
+                  ),
+                  Image(
+                    image: AssetImage("images/$rightDiceNo.png"),
+                    width: 120,
+                    height: 120,
+                  ),
+                ],
+              )
             ],
           ),
+          const SizedBox(height: 50.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.all(30),
-                child: Image(
-                  image: AssetImage(_img1url),
-                  width: 120,
-                  height: 120,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(200.0, 50.0),
+                  backgroundColor: Colors.indigo,
+                  foregroundColor: Colors.white,
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(30),
-                child: Image(
-                  image: AssetImage(_img2url),
-                  width: 120,
-                  height: 120,
+                onPressed: onClick,
+                child: const Text(
+                  "Roll it!",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.5,
+                  ),
                 ),
               ),
             ],
-          ),
-          Container(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueGrey,
-              ),
-              onPressed: onClick,
-              child: Text(
-                "Roll it!",
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.5,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(30),
-            child: Text(
-              _winner,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.5,
-              ),
-            ),
           ),
         ],
       ),
