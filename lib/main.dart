@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(const MyApp());
 
@@ -39,18 +42,33 @@ class _HomeScreenState extends State<HomeScreen> {
   int leftDiceNo = 2;
   int rightDiceNo = 2;
 
-  void onClick() {
+  Future<void> onRoll() async {
     setState(() {
       leftDiceNo = Random().nextInt(6) + 1;
       rightDiceNo = Random().nextInt(5) + 1;
-
-      if (leftDiceNo > rightDiceNo) {
-      } else if (leftDiceNo < rightDiceNo) {
-        //_winner = "Palyer 2 \nwon  this round";
-      } else {
-        //_winner = "No Winner this round";
-      }
     });
+
+    String gameResult = "";
+    if (leftDiceNo > rightDiceNo) {
+      gameResult = "Player 1 won!";
+    } else if (leftDiceNo < rightDiceNo) {
+      gameResult = "Player 2 won!";
+    } else {
+      gameResult = "It's a draw!";
+    }
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    Alert(context: context, title: "Dice Game", desc: gameResult, buttons: [
+      DialogButton(
+          child: const Text(
+            "Play Again!",
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            Alert(context: context).dismiss();
+          }),
+    ]).show();
   }
 
   @override
@@ -123,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.indigo,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: onClick,
+                onPressed: onRoll,
                 child: const Text(
                   "Roll it!",
                   style: TextStyle(
